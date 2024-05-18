@@ -15,13 +15,14 @@ export default defineConfig({
     restoreMocks: true,
     setupFiles: ['test/vitest.setup.ts'],
     coverage: {
-      exclude: [
-        '**/node_modules/**',
-        '**/commitlint.config.ts',
-        '**/release.config.cjs',
-        '**/index.ts',
-        '**/models/**',
-      ],
+      // exclude: [
+      //   '**/node_modules/**',
+      //   '**/commitlint.config.ts',
+      //   '**/release.config.cjs',
+      //   '**/index.ts',
+      //   '**/models/**',
+      // ],
+      include: ['src/shared/components/Loader.tsx'],
     },
   },
   envPrefix: 'RC_',
