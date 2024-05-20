@@ -1,7 +1,7 @@
 import { AxiosError } from '../models/axios.model';
 
 export const getError = (error: AxiosError): string => {
-  return error.response?.data?.message || error.message || '';
+  return error.response?.data?.message || error.message || 'Unknown error';
 };
 
 export const getErrorStatus = (error: AxiosError): number => {

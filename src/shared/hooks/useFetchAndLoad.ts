@@ -7,22 +7,14 @@ import { AxiosCall, AxiosData, AxiosError } from '../models/axios.model';
 import { getError, getErrorStatus } from '../utils/axios-error.util';
 import { getId } from '../utils/uuid.util';
 
-export const useFetchAndLoad = (
-  options: {
-    showToast?: boolean;
-  } = {
-    showToast: true,
-  }
-) => {
+export const useFetchAndLoad = () => {
   const { addLoader, removeLoader } = useLoader();
   const { pushError, pushSuccess } = useToast();
-
-  const { showToast } = options;
 
   const [controller, setController] = useState<AbortController | undefined>(undefined);
 
   const callEndpoint = useCallback(
-    async <T>(axiosCall: AxiosCall<AxiosData<T>>) => {
+    async <T>(axiosCall: AxiosCall<AxiosData<T>>, showToast = true) => {
       if (axiosCall.controller) setController(axiosCall.controller);
       addLoader();
 
@@ -54,7 +46,7 @@ export const useFetchAndLoad = (
       return result.data;
     },
 
-    [pushError, pushSuccess, showToast, addLoader, removeLoader]
+    [pushError, pushSuccess, addLoader, removeLoader]
   );
 
   useEffect(() => {

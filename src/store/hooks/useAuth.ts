@@ -20,7 +20,7 @@ export const useAuth = () => {
     let user = storage.getStorage('user');
 
     if (!user) {
-      const axiosResponse = await callEndpoint<ApiUser>(authService.loginSuccess());
+      const axiosResponse = await callEndpoint<ApiUser>(authService.loginSuccess(), false);
 
       if (!axiosResponse.success || !axiosResponse.responseObject) {
         dispatch(endProcessing());
@@ -30,6 +30,7 @@ export const useAuth = () => {
       }
 
       user = adapterUser(axiosResponse.responseObject);
+      storage.setStorage('user', user);
     }
 
     dispatch(login(user));

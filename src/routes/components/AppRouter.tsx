@@ -1,8 +1,10 @@
 import { createBrowserRouter, createRoutesFromElements, Navigate, Route } from 'react-router-dom';
 
-import Auth from './app/Auth';
-import Home from './app/Home';
-import { ModuleRoute } from './routes/models/module.model';
+import Auth from '@/app/Auth';
+import Home from '@/app/Home';
+import Tasks from '@/app/Tasks';
+
+import { ModuleRoute } from '../models/module.model';
 
 export const AppRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -10,6 +12,10 @@ export const AppRouter = createBrowserRouter(
       <Route
         path={`${ModuleRoute.AUTH}/*`}
         element={<Auth />}
+      />
+      <Route
+        path={`${ModuleRoute.TASKS}/*`}
+        element={<Tasks />}
       />
       <Route
         path={`${ModuleRoute.HOME}/*`}

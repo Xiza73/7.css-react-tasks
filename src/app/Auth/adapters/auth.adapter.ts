@@ -9,6 +9,7 @@ export const adapterUser = (apiUser: ApiUser): User => {
     name: '',
     ...(origin === 'google' && { name: apiUser.google?.name || '' }),
     origin,
+    token: apiUser.token,
     createdAt: apiUser.createdAt,
     updatedAt: apiUser.updatedAt,
   };
