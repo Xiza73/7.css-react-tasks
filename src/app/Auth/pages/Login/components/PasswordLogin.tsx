@@ -2,8 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { Form } from '@/shared/components/Form';
 import { Input } from '@/shared/components/Input';
-import { showError } from '@/shared/utils/show-error.util';
 import { useAuth } from '@/store';
 
 const formSchema = z.object({
@@ -28,11 +28,11 @@ export const PasswordLogin: React.FC = () => {
   };
 
   return (
-    <form
-      className="flex flex-col gap-1"
+    <Form
       onSubmit={handleSubmit(async (data) => await onSubmit(data))}
+      errors={errors}
+      buttonText="Login"
     >
-      {<p className="mb-2 text-danger-500">{showError(errors)?.toString()}</p>}
       <Input
         label="Email"
         name="email"
@@ -45,12 +45,6 @@ export const PasswordLogin: React.FC = () => {
         type="password"
         register={register}
       />
-      <button
-        className="mt-3 w-fit ml-auto"
-        type="submit"
-      >
-        Login
-      </button>
-    </form>
+    </Form>
   );
 };

@@ -8,6 +8,7 @@ export interface ApiUser {
     email: string;
     name: string;
   };
+  token?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -19,6 +20,7 @@ export interface User {
   email: string;
   name: string;
   origin: Origin;
+  token?: string;
   createdAt: string;
   updatedAt: string;
 }
