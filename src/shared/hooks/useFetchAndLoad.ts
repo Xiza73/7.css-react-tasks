@@ -1,5 +1,6 @@
-import { AxiosResponse } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
+
+import { checkSession } from '@/app/Auth/services/auth.service';
 
 import { useLoader } from '../context/loader';
 import { useToast } from '../context/toast';
@@ -14,40 +15,84 @@ export const useFetchAndLoad = () => {
   const [controller, setController] = useState<AbortController | undefined>(undefined);
 
   const callEndpoint = useCallback(
-    async <T>(axiosCall: AxiosCall<AxiosData<T>>, showToast = true) => {
-      if (axiosCall.controller) setController(axiosCall.controller);
-      addLoader();
-
-      let result = {} as AxiosResponse<AxiosData<T>>;
+    async <T>(
+      axiosCall: AxiosCall<AxiosData<T>>,
+      options: {
+        showSuccess?: boolean;
+        showError?: boolean;
+      } = {
+        showSuccess: true,
+        showError: true,
+      }
+    ) => {
+      const { showSuccess, showError } = options;
 
       try {
-        result = await axiosCall.call;
+        if (axiosCall.controller) setController(axiosCall.controller);
+        addLoader();
+
+        const result = await axiosCall.call;
 
         if (!result.data.success) throw new Error(result.data.message);
+
+        removeLoader();
+
+        showSuccess && pushSuccess(getId(), result.data.message || 'Success');
+
+        return result.data;
       } catch (err: unknown) {
         removeLoader();
+        const status = getErrorStatus(err as AxiosError);
 
         const axiosError: AxiosData<null> = {
           message: getError(err as AxiosError),
           success: false,
           responseObject: null,
-          statusCode: getErrorStatus(err as AxiosError),
+          statusCode: status,
         };
 
-        showToast && pushError(getId(), axiosError.message);
+        showError && pushError(getId(), axiosError.message);
 
         return axiosError;
       }
+    },
+
+    [addLoader, removeLoader, pushSuccess, pushError]
+  );
+
+  const callMiddlewareEndpoint = useCallback(async () => {
+    try {
+      const axiosCall = checkSession();
+
+      if (axiosCall.controller) setController(axiosCall.controller);
+      addLoader();
+
+      const result = await axiosCall.call;
+
+      if (!result?.data?.success) throw new Error(result?.data?.message);
 
       removeLoader();
 
-      showToast && pushSuccess(getId(), result.data.message || 'Success');
+      return {
+        success: true,
+        message: result?.data?.message || 'Success',
+      };
+    } catch (err: unknown) {
+      removeLoader();
+      const status = getErrorStatus(err as AxiosError);
 
-      return result.data;
-    },
+      const axiosError: AxiosData<null> = {
+        message: 'Session expired. Please login again.',
+        success: false,
+        responseObject: null,
+        statusCode: status,
+      };
 
-    [pushError, pushSuccess, addLoader, removeLoader]
-  );
+      pushError(getId(), axiosError.message);
+
+      return axiosError;
+    }
+  }, [addLoader, removeLoader, pushError]);
 
   useEffect(() => {
     const cancelEndpoint = () => {
@@ -59,5 +104,5 @@ export const useFetchAndLoad = () => {
     };
   }, [controller, removeLoader]);
 
-  return { callEndpoint };
+  return { callEndpoint, callMiddlewareEndpoint };
 };

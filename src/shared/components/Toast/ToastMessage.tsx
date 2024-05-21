@@ -6,26 +6,26 @@ import { Toast, ToastMessageType, Truncate } from '@/shared/context/toast';
 
 const VARIANTS = {
   [ToastMessageType.INFO]: {
-    base: 'bg-white border-blue-500',
-    iconstyle: 'text-blue-500 ',
+    base: 'bg-white border-primary-500',
+    iconstyle: 'text-primary-500 ',
     icon: 'material-symbols:info-outline',
     name: 'Info',
   },
   [ToastMessageType.ERROR]: {
-    base: 'bg-white border-red-500 ',
-    iconstyle: 'text-red-500 ',
+    base: 'bg-white border-danger-500 ',
+    iconstyle: 'text-danger-500 ',
     icon: 'system-uicons:cross-circle',
     name: 'Error',
   },
   [ToastMessageType.WARNING]: {
-    base: 'bg-white border-yellow-500',
-    iconstyle: 'text-yellow-500 ',
+    base: 'bg-white border-primary-900',
+    iconstyle: 'text-primary-900 ',
     icon: 'ph:warning-light',
     name: 'Warning',
   },
   [ToastMessageType.SUCCESS]: {
-    base: 'bg-white border-green-500',
-    iconstyle: 'text-green-500 ',
+    base: 'bg-white border-secondary-400',
+    iconstyle: 'text-secondary-400 ',
     icon: 'clarity:success-standard-line',
     name: 'Success',
   },

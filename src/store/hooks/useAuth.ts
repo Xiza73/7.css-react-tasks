@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { adapterUser } from '@/app/Auth/adapters/auth.adapter';
+import { userAdapter } from '@/app/Auth/adapters/auth.adapter';
 import { ApiUser } from '@/app/Auth/models/auth.model';
 import * as authService from '@/app/Auth/services/auth.service';
 import { useLoader } from '@/shared/context/loader';
@@ -13,14 +13,26 @@ import { useDispatch } from '.';
 export const useAuth = () => {
   const dispatch = useDispatch();
   const { addLoader, removeLoader } = useLoader();
-  const { callEndpoint } = useFetchAndLoad();
+  const { callEndpoint, callMiddlewareEndpoint } = useFetchAndLoad();
 
   const handlerCurrentUser = useCallback(async () => {
     addLoader();
     let user = storage.getStorage('user');
 
+    if (user) {
+      const middlewareResponse = await callMiddlewareEndpoint();
+      if (!middlewareResponse.success) {
+        storage.removeStorage('user');
+
+        dispatch(endProcessing());
+        removeLoader();
+
+        return;
+      }
+    }
+
     if (!user) {
-      const axiosResponse = await callEndpoint<ApiUser>(authService.loginSuccess(), false);
+      const axiosResponse = await callEndpoint<ApiUser>(authService.loginSuccess(), { showError: false });
 
       if (!axiosResponse.success || !axiosResponse.responseObject) {
         dispatch(endProcessing());
@@ -29,14 +41,14 @@ export const useAuth = () => {
         return;
       }
 
-      user = adapterUser(axiosResponse.responseObject);
+      user = userAdapter(axiosResponse.responseObject);
       storage.setStorage('user', user);
     }
 
     dispatch(login(user));
     dispatch(endProcessing());
     removeLoader();
-  }, [callEndpoint, dispatch, addLoader, removeLoader]);
+  }, [addLoader, dispatch, removeLoader, callMiddlewareEndpoint, callEndpoint]);
 
   const loginAction = useCallback(
     async (email: string, password: string): Promise<boolean> => {
@@ -45,9 +57,9 @@ export const useAuth = () => {
       const axiosResponse = await callEndpoint<ApiUser>(authService.signIn(email, password));
 
       if (axiosResponse.success && axiosResponse.responseObject) {
-        storage.setStorage('user', adapterUser(axiosResponse.responseObject));
+        storage.setStorage('user', userAdapter(axiosResponse.responseObject));
 
-        dispatch(login(adapterUser(axiosResponse.responseObject)));
+        dispatch(login(userAdapter(axiosResponse.responseObject)));
       }
 
       removeLoader();
@@ -83,7 +95,7 @@ export const useAuth = () => {
 
       storage.setStorage('user', axiosResponse.responseObject);
 
-      dispatch(signUp(adapterUser(axiosResponse.responseObject)));
+      dispatch(signUp(userAdapter(axiosResponse.responseObject)));
       removeLoader();
 
       return axiosResponse.success;
