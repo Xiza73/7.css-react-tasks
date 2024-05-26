@@ -49,7 +49,7 @@ export const ListTasks: React.FC = () => {
   }, []);
 
   return (
-    <section className="flex flex-col w-full h-[calc(100vh-3.8rem)] pt-2 px-2">
+    <section className="flex flex-col w-full h-[calc(100vh-89px)] pt-2 px-2">
       <div className="searchbox mx-auto mb-3">
         <input
           type="search"
