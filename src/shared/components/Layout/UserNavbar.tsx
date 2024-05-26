@@ -47,7 +47,9 @@ export const UserNavbar: React.FC = () => {
             Task
             <Menu>
               <MenuItem>
-                <MenuOption onClick={() => navigate(`${ModuleRoute.TASKS}${TasksRoute.LIST}`)}>List</MenuOption>
+                <MenuOption onClick={() => navigate(`${ModuleRoute.TASKS}${TasksRoute.LIST}`)}>
+                  List <span>Alt+T</span>
+                </MenuOption>
               </MenuItem>
               <MenuItem>
                 <MenuOption onClick={() => navigate(`${ModuleRoute.TASKS}${TasksRoute.CREATE}`)}>Create</MenuOption>
