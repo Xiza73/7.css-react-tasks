@@ -15,7 +15,7 @@ export const Form: React.FC<FormProps> = ({ onSubmit, buttonText = 'Submit', err
       className="flex flex-col gap-1"
       onSubmit={onSubmit}
     >
-      {<p className="mb-2 text-danger-500">{showError(errors)?.toString()}</p>}
+      {showError(errors) && <p className="mb-2 text-danger-500">{showError(errors)?.toString()}</p>}
       {children}
       <button
         className="mt-3 w-fit ml-auto"

@@ -30,3 +30,20 @@ body {
     background: none !important;
   }
 }
+
+.nav-option {
+  all: unset;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 10px 4px 32px;
+  position: relative;
+  white-space: nowrap;
+  width: 100%;
+  &:hover {
+    background: linear-gradient(180deg, #fff9, #e6ecf5cc 90%, #fffc);
+    border-color: #b8d6fb;
+  }
+}
