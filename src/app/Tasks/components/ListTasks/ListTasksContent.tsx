@@ -5,7 +5,7 @@ export const ListTasksContent: React.FC = () => {
   const { tasks, total, handleShowMore } = useTask();
 
   return (
-    <div className="flex justify-around items-stretch flex-wrap gap-x-2 gap-y-6 overflow-y-auto pt-1 pb-3">
+    <div className="flex justify-around items-stretch flex-wrap gap-x-2 gap-y-6 overflow-y-auto pt-1 pb-3 has-scrollbar">
       {tasks.map(({ id, title, description, status, createdAt }) => (
         <TaskCard
           key={id}

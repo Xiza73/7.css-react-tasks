@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 
 import { AppRouter } from './routes/components/AppRouter';
 import { Loader } from './shared/components/Loader';
+import { Modal } from './shared/components/Modal';
 import { useAuth, useSelector } from './store';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
     <>
       <RouterProvider router={AppRouter} />
       <Loader />
+      <Modal />
     </>
   );
 }

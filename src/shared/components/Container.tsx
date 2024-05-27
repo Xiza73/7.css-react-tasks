@@ -9,11 +9,11 @@ export interface ContainerProps extends ChildrenProps {
   showMinimize?: boolean;
   showMaximize?: boolean;
   showClose?: boolean;
-  showControls?: boolean;
   maximizeClassName?: string;
   height?: string;
   width?: string;
   footer?: React.ReactNode;
+  withoutFooter?: boolean;
   onMaximize?: () => void;
   onClose?: () => void;
 }
@@ -24,18 +24,19 @@ export const Container: React.FC<ContainerProps> = ({
   showMinimize = false,
   showMaximize = false,
   showClose = false,
-  showControls = false,
   maximizeClassName,
   height = 'h-auto',
   width = 'w-64',
   footer = null,
+  withoutFooter = false,
   onMaximize,
+  onClose,
 }) => {
   return (
     <div className={clsx('window active flex flex-col', width)}>
       <div className="title-bar">
         <div className="title-bar-text">{title}</div>
-        {showControls && (
+        {(showMinimize || showMaximize || showClose) && (
           <div className="title-bar-controls">
             {showMinimize && <button aria-label="Minimize"></button>}
             {showMaximize && (
@@ -45,14 +46,24 @@ export const Container: React.FC<ContainerProps> = ({
                 onClick={onMaximize}
               ></button>
             )}
-            {showClose && <button aria-label="Close"></button>}
+            {showClose && (
+              <button
+                aria-label="Close"
+                onClick={onClose}
+              ></button>
+            )}
           </div>
         )}
       </div>
-      <div className={clsx('window-body has-space flex-1', height)}>
-        {children}
-      </div>
-      {footer}
+      {!withoutFooter && (
+        <>
+          <div className={clsx('window-body has-space flex-1', height)}>
+            {children}
+          </div>
+          {footer}
+        </>
+      )}
+      {withoutFooter && children}
     </div>
   );
 };

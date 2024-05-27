@@ -68,3 +68,14 @@ export const updateTask = (
 
   return { call, controller };
 };
+
+export const deleteTask = (id: string) => {
+  const controller = loadAbort();
+
+  const call = axios.delete(`${MODULE}/${id}`, {
+    signal: controller.signal,
+    headers: getHeaders(),
+  });
+
+  return { call, controller };
+};

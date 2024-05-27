@@ -2,8 +2,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { ModuleRoute } from '@/routes/models/module.model';
 import { Container } from '@/shared/components/Container';
+import { useModal } from '@/shared/context/modal/ModalContext';
+import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
 
+import { useTask } from '../context/task/TaskContext';
 import { TaskStatus } from '../models/task-status.model';
+import { deleteTask } from '../services/task.service';
+import { DeleteModal } from './DeleteModal';
 
 export interface TaskCardProps {
   id: string;
@@ -21,12 +26,30 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   status,
 }) => {
   const navigate = useNavigate();
+  const { openModal, closeModal } = useModal();
+  const { callEndpoint } = useFetchAndLoad();
+  const { handleTasks } = useTask();
+
+  const handleConfirmDelete = async () => {
+    await callEndpoint(deleteTask(id));
+    handleTasks();
+
+    navigate('/tasks');
+
+    closeModal();
+  };
+
+  const handleDelete = () => {
+    openModal({
+      component: <DeleteModal handleDelete={handleConfirmDelete} />,
+    });
+  };
 
   return (
     <Container
-      showControls
       showMaximize
       showClose
+      onClose={handleDelete}
       maximizeClassName="edit"
       onMaximize={() => navigate(`${ModuleRoute.TASKS}/edit/${id}`)}
       title="Task"
