@@ -5,7 +5,10 @@ export interface MenuOptionProps extends ChildrenProps {
   onClick?: () => void;
 }
 
-export const MenuOption: React.FC<MenuOptionProps> = ({ onClick = noopFunction, children }) => {
+export const MenuOption: React.FC<MenuOptionProps> = ({
+  onClick = noopFunction,
+  children,
+}) => {
   return (
     <div
       className="nav-option"

@@ -9,7 +9,10 @@ interface ShortcutConfig extends Partial<OptionalConfig> {
 
 type ShortcutAction = (e: KeyboardEvent) => void;
 
-export const useKeyboardShortcut = (shortcutAction: ShortcutAction, config: ShortcutConfig) => {
+export const useKeyboardShortcut = (
+  shortcutAction: ShortcutAction,
+  config: ShortcutConfig
+) => {
   const targetElement = config.shortcutTarget || document;
 
   const eventHandler = useCallback(
@@ -26,7 +29,14 @@ export const useKeyboardShortcut = (shortcutAction: ShortcutAction, config: Shor
   );
 
   useEffect(() => {
-    targetElement.addEventListener('keydown', eventHandler as EventListenerOrEventListenerObject);
-    return () => targetElement.removeEventListener('keydown', eventHandler as EventListenerOrEventListenerObject);
+    targetElement.addEventListener(
+      'keydown',
+      eventHandler as EventListenerOrEventListenerObject
+    );
+    return () =>
+      targetElement.removeEventListener(
+        'keydown',
+        eventHandler as EventListenerOrEventListenerObject
+      );
   }, [targetElement, eventHandler]);
 };

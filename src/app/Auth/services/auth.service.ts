@@ -8,7 +8,11 @@ const MODULE = '/auth';
 export const signIn = (email: string, password: string) => {
   const controller = loadAbort();
 
-  const call = axios.post(`${MODULE}/signin`, { email, password }, { signal: controller.signal });
+  const call = axios.post(
+    `${MODULE}/signin`,
+    { email, password },
+    { signal: controller.signal }
+  );
 
   return { call, controller };
 };
@@ -35,10 +39,18 @@ export const logout = () => {
   return { call, controller };
 };
 
-export const signUp = (email: string, password: string, repeatPassword: string) => {
+export const signUp = (
+  email: string,
+  password: string,
+  repeatPassword: string
+) => {
   const controller = loadAbort();
 
-  const call = axios.post(`${MODULE}/signup`, { email, password, repeatPassword }, { signal: controller.signal });
+  const call = axios.post(
+    `${MODULE}/signup`,
+    { email, password, repeatPassword },
+    { signal: controller.signal }
+  );
 
   return { call, controller };
 };
@@ -46,7 +58,10 @@ export const signUp = (email: string, password: string, repeatPassword: string) 
 export const checkSession = () => {
   const controller = loadAbort();
 
-  const call = axios.get(`${MODULE}/check-session`, { signal: controller.signal, headers: getHeaders() });
+  const call = axios.get(`${MODULE}/check-session`, {
+    signal: controller.signal,
+    headers: getHeaders(),
+  });
 
   return { call, controller };
 };

@@ -1,8 +1,10 @@
+import { TaskStatus } from './task-status.model';
+
 export interface ApiTask {
   _id: string;
   title: string;
   description: string;
-  status: string;
+  status: TaskStatus;
   createdAt: string;
   updatedAt: string;
 }
@@ -18,7 +20,7 @@ export interface Task {
   id: string;
   title: string;
   description: string;
-  status: string;
+  status: TaskStatus;
   createdAt: string;
   updatedAt: string;
 }

@@ -8,7 +8,9 @@ export type ToastContainerProps = {
   variant?: Variant;
 };
 
-export default function ToastContainer({ variant = Variant.BOTTOM_RIGHT }: ToastContainerProps) {
+export default function ToastContainer({
+  variant = Variant.BOTTOM_RIGHT,
+}: ToastContainerProps) {
   const { data, remove } = useToast();
 
   function handleRemove(id: string) {
@@ -23,12 +25,19 @@ export default function ToastContainer({ variant = Variant.BOTTOM_RIGHT }: Toast
         'p-4 md:p-4 max-h-screen overflow-hidden pointer-events-none'
       )}
     >
-      <div className={clsx('flex-1 flex-col fade w-full mr-8 justify-end pointer-events-none')}>
+      <div
+        className={clsx(
+          'flex-1 flex-col fade w-full mr-8 justify-end pointer-events-none'
+        )}
+      >
         {data.map((toast) => {
           return (
             <div
               key={toast.id}
-              className={clsx('flex py-1 w-full', 'transform transition-all duration-300 pointer-events-auto')}
+              className={clsx(
+                'flex py-1 w-full',
+                'transform transition-all duration-300 pointer-events-auto'
+              )}
             >
               <ToastMessage
                 id={toast.id}

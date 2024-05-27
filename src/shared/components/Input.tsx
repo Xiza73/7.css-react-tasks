@@ -8,6 +8,7 @@ export interface InputProps<TFieldValues extends FieldValues> {
   register: UseFormRegister<TFieldValues>;
   type: string;
   hasBreakpoint?: boolean;
+  options?: string[];
 }
 
 export const Input = <TFieldValues extends FieldValues>({
@@ -66,6 +67,44 @@ export const TextArea = <TFieldValues extends FieldValues>({
         id={id}
         {...register(name)}
       />
+    </div>
+  );
+};
+export const Select = <TFieldValues extends FieldValues>({
+  label,
+  name,
+  register,
+  options,
+  hasBreakpoint = false,
+}: InputProps<TFieldValues>) => {
+  const id = useId();
+
+  return (
+    <div
+      className={clsx('field-row', {
+        'flex flex-col !items-start justify-start w-full gap-1': hasBreakpoint,
+      })}
+    >
+      <label htmlFor={name}>
+        {label}
+        {hasBreakpoint && ':'}
+      </label>
+      <select
+        className={clsx('w-full', {
+          '!ml-0': hasBreakpoint,
+        })}
+        id={id}
+        {...register(name)}
+      >
+        {options?.map((option) => (
+          <option
+            key={option}
+            value={option}
+          >
+            {option}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };

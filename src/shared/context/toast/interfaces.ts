@@ -4,9 +4,13 @@ export const ToastMessageType = {
   SUCCESS: 'Success',
   WARNING: 'Warning',
 } as const;
-export type ToastMessageType = (typeof ToastMessageType)[keyof typeof ToastMessageType];
+export type ToastMessageType =
+  (typeof ToastMessageType)[keyof typeof ToastMessageType];
 
-export type Truncate = 'truncate-1-lines' | 'truncate-2-lines' | 'truncate-3-lines';
+export type Truncate =
+  | 'truncate-1-lines'
+  | 'truncate-2-lines'
+  | 'truncate-3-lines';
 
 export const Variant = {
   BOTTOM_LEFT: 'bottom-5 left-0',
@@ -34,12 +38,44 @@ export interface ToastState {
 }
 
 export interface ToastContextProps extends ToastState {
-  pushError(id: string, message: string, lifetime?: number, truncate?: Truncate): void;
-  pushWarning(id: string, message: string, lifetime?: number, truncate?: Truncate): void;
-  pushSuccess(id: string, message: string, lifetime?: number, truncate?: Truncate): void;
-  pushInfo(id: string, message: string, lifetime?: number, truncate?: Truncate): void;
-  push(id: string, message: string, type: ToastMessageType, lifetime?: number, truncate?: Truncate): void;
-  pushCustom(id: string, message: string | React.ReactNode, lifetime: number, truncate?: Truncate, icon?: string): void;
+  pushError(
+    id: string,
+    message: string,
+    lifetime?: number,
+    truncate?: Truncate
+  ): void;
+  pushWarning(
+    id: string,
+    message: string,
+    lifetime?: number,
+    truncate?: Truncate
+  ): void;
+  pushSuccess(
+    id: string,
+    message: string,
+    lifetime?: number,
+    truncate?: Truncate
+  ): void;
+  pushInfo(
+    id: string,
+    message: string,
+    lifetime?: number,
+    truncate?: Truncate
+  ): void;
+  push(
+    id: string,
+    message: string,
+    type: ToastMessageType,
+    lifetime?: number,
+    truncate?: Truncate
+  ): void;
+  pushCustom(
+    id: string,
+    message: string | React.ReactNode,
+    lifetime: number,
+    truncate?: Truncate,
+    icon?: string
+  ): void;
   setVariant(variant?: Variant): void;
   remove(id: string): void;
 }

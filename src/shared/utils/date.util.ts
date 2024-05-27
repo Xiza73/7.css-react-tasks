@@ -9,7 +9,9 @@ export const dateFormat = (
   }
 ): string => {
   try {
-    return new Date(date).toLocaleDateString(options.locale, options.format);
+    const dateValue = new Date(date);
+
+    return dateValue.toLocaleDateString(options.locale, options.format);
   } catch (error) {
     return '';
   }

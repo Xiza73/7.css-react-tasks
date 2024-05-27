@@ -16,7 +16,8 @@ type ToastHandler = (state: ToastState, action: ToastAction) => ToastState;
 
 const toastReducerHandler: Record<ToastActions, ToastHandler> = {
   [ToastActions.PUSH]: (state, action) => {
-    const { id, message, type, lifetime, truncate } = (action as PushAction).payload;
+    const { id, message, type, lifetime, truncate } = (action as PushAction)
+      .payload;
 
     return {
       ...state,
@@ -33,7 +34,8 @@ const toastReducerHandler: Record<ToastActions, ToastHandler> = {
     };
   },
   [ToastActions.PUSH_INFO]: (state, action) => {
-    const { id, message, lifetime, truncate } = (action as PushInfoAction).payload;
+    const { id, message, lifetime, truncate } = (action as PushInfoAction)
+      .payload;
 
     return {
       ...state,
@@ -50,7 +52,8 @@ const toastReducerHandler: Record<ToastActions, ToastHandler> = {
     };
   },
   [ToastActions.PUSH_SUCCESS]: (state, action) => {
-    const { id, message, lifetime, truncate } = (action as PushSuccessAction).payload;
+    const { id, message, lifetime, truncate } = (action as PushSuccessAction)
+      .payload;
 
     return {
       ...state,
@@ -67,7 +70,8 @@ const toastReducerHandler: Record<ToastActions, ToastHandler> = {
     };
   },
   [ToastActions.PUSH_WARNING]: (state, action) => {
-    const { id, message, lifetime, truncate } = (action as PushWarningAction).payload;
+    const { id, message, lifetime, truncate } = (action as PushWarningAction)
+      .payload;
 
     return {
       ...state,
@@ -84,7 +88,8 @@ const toastReducerHandler: Record<ToastActions, ToastHandler> = {
     };
   },
   [ToastActions.PUSH_ERROR]: (state, action) => {
-    const { id, message, lifetime, truncate } = (action as PushErrorAction).payload;
+    const { id, message, lifetime, truncate } = (action as PushErrorAction)
+      .payload;
 
     return {
       ...state,
@@ -101,7 +106,9 @@ const toastReducerHandler: Record<ToastActions, ToastHandler> = {
     };
   },
   [ToastActions.PUSH_CUSTOM]: (state, action) => {
-    const { id, message, icon, lifetime, truncate } = (action as PushCustomAction).payload;
+    const { id, message, icon, lifetime, truncate } = (
+      action as PushCustomAction
+    ).payload;
 
     return {
       ...state,
@@ -135,5 +142,7 @@ const toastReducerHandler: Record<ToastActions, ToastHandler> = {
   },
 };
 
-export const toastReducer = (state: ToastState, action: ToastAction): ToastState =>
-  toastReducerHandler[action.type](state, action) ?? state;
+export const toastReducer = (
+  state: ToastState,
+  action: ToastAction
+): ToastState => toastReducerHandler[action.type](state, action) ?? state;

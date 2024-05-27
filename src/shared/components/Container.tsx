@@ -14,6 +14,8 @@ export interface ContainerProps extends ChildrenProps {
   height?: string;
   width?: string;
   footer?: React.ReactNode;
+  onMaximize?: () => void;
+  onClose?: () => void;
 }
 
 export const Container: React.FC<ContainerProps> = ({
@@ -27,9 +29,10 @@ export const Container: React.FC<ContainerProps> = ({
   height = 'h-auto',
   width = 'w-64',
   footer = null,
+  onMaximize,
 }) => {
   return (
-    <div className={clsx('window active', width)}>
+    <div className={clsx('window active flex flex-col', width)}>
       <div className="title-bar">
         <div className="title-bar-text">{title}</div>
         {showControls && (
@@ -38,15 +41,17 @@ export const Container: React.FC<ContainerProps> = ({
             {showMaximize && (
               <button
                 aria-label="Maximize"
-                // className="edit"
                 className={clsx({ edit: maximizeClassName })}
+                onClick={onMaximize}
               ></button>
             )}
             {showClose && <button aria-label="Close"></button>}
           </div>
         )}
       </div>
-      <div className={clsx('window-body has-space', height)}>{children}</div>
+      <div className={clsx('window-body has-space flex-1', height)}>
+        {children}
+      </div>
       {footer}
     </div>
   );

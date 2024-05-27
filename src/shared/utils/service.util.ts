@@ -9,7 +9,10 @@ const cleanObject = (obj: { [key: string]: any }) => {
   );
 };
 
-export const buildWithQueryParams = (url: string, params: { [key: string]: any }) => {
+export const buildWithQueryParams = (
+  url: string,
+  params: { [key: string]: any }
+) => {
   const cleanedParams = cleanObject(params);
 
   if (Object.keys(cleanedParams).length === 0) return url;

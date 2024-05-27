@@ -45,7 +45,7 @@ export const Login: React.FC = () => {
         <article
           role="tabpanel"
           id={Tab.PASSWORD}
-          className="min-h-36"
+          className="min-h-32"
         >
           <PasswordLogin />
         </article>
@@ -54,7 +54,7 @@ export const Login: React.FC = () => {
         <article
           role="tabpanel"
           id={Tab.PLATFORM}
-          className="min-h-36 flex flex-col items-center justify-center"
+          className="min-h-32 flex flex-col items-center justify-center"
         >
           <GoogleLogin />
         </article>

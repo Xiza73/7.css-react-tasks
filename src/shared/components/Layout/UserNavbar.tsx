@@ -19,19 +19,6 @@ export const UserNavbar: React.FC = () => {
       <MenuItem hasPopup>
         User
         <Menu>
-          {/* <li role="menuitem">
-            <div className="nav-option">
-              Open <span>Ctrl+O</span>
-            </div>
-          </li>
-          <li
-            role="menuitem"
-            className="has-divider"
-          >
-            <div className="nav-option">
-              Save <span>Ctrl+S</span>
-            </div>
-          </li> */}
           <MenuItem>
             <MenuOption onClick={logout}>Logout</MenuOption>
           </MenuItem>
@@ -41,21 +28,32 @@ export const UserNavbar: React.FC = () => {
         Go to...
         <Menu>
           <MenuItem>
-            <MenuOption onClick={() => navigate(`${ModuleRoute.HOME}${HomeRoute.MAIN}`)}>Home</MenuOption>
+            <MenuOption
+              onClick={() => navigate(`${ModuleRoute.HOME}${HomeRoute.MAIN}`)}
+            >
+              Home
+            </MenuOption>
           </MenuItem>
           <MenuItem hasPopup>
             Task
             <Menu>
               <MenuItem>
-                <MenuOption onClick={() => navigate(`${ModuleRoute.TASKS}${TasksRoute.LIST}`)}>
+                <MenuOption
+                  onClick={() =>
+                    navigate(`${ModuleRoute.TASKS}${TasksRoute.LIST}`)
+                  }
+                >
                   List <span>Alt+T</span>
                 </MenuOption>
               </MenuItem>
               <MenuItem>
-                <MenuOption onClick={() => navigate(`${ModuleRoute.TASKS}${TasksRoute.CREATE}`)}>Create</MenuOption>
-              </MenuItem>
-              <MenuItem>
-                <MenuOption onClick={() => navigate(`${ModuleRoute.TASKS}/edit/1`)}>Edit</MenuOption>
+                <MenuOption
+                  onClick={() =>
+                    navigate(`${ModuleRoute.TASKS}${TasksRoute.CREATE}`)
+                  }
+                >
+                  Create
+                </MenuOption>
               </MenuItem>
             </Menu>
           </MenuItem>

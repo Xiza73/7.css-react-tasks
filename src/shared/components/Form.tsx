@@ -9,13 +9,20 @@ export interface FormProps extends ChildrenProps {
   errors: FieldErrors<any>;
 }
 
-export const Form: React.FC<FormProps> = ({ onSubmit, buttonText = 'Submit', errors, children }) => {
+export const Form: React.FC<FormProps> = ({
+  onSubmit,
+  buttonText = 'Submit',
+  errors,
+  children,
+}) => {
   return (
     <form
       className="flex flex-col gap-1"
       onSubmit={onSubmit}
     >
-      {showError(errors) && <p className="mb-2 text-danger-500">{showError(errors)?.toString()}</p>}
+      {showError(errors) && (
+        <p className="mb-2 text-danger-500">{showError(errors)?.toString()}</p>
+      )}
       {children}
       <button
         className="mt-3 w-fit ml-auto"

@@ -12,7 +12,9 @@ export const useFetchAndLoad = () => {
   const { addLoader, removeLoader } = useLoader();
   const { pushError, pushSuccess } = useToast();
 
-  const [controller, setController] = useState<AbortController | undefined>(undefined);
+  const [controller, setController] = useState<AbortController | undefined>(
+    undefined
+  );
 
   const callEndpoint = useCallback(
     async <T>(
