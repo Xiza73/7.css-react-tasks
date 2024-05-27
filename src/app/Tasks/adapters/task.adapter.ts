@@ -1,3 +1,5 @@
+import { dateFormat } from '@/shared/utils/date.util';
+
 import { ApiTask, Task } from '../models/task.model';
 
 export const taskAdapter = (apiTask: ApiTask): Task => {
@@ -6,7 +8,7 @@ export const taskAdapter = (apiTask: ApiTask): Task => {
     title: apiTask.title,
     description: apiTask.description,
     status: apiTask.status,
-    createdAt: apiTask.createdAt,
-    updatedAt: apiTask.updatedAt,
+    createdAt: dateFormat(apiTask.createdAt),
+    updatedAt: dateFormat(apiTask.updatedAt),
   };
 };
