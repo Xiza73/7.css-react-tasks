@@ -6,7 +6,10 @@ export const createContext = <T>(initialContext: T, name = 'Context') => {
   const useContext = () => {
     try {
       const ctx = React.useContext(context);
-      if (!ctx) throw new Error(`use${name} must be inside a ${name}Provider with a value`);
+      if (!ctx)
+        throw new Error(
+          `use${name} must be inside a ${name}Provider with a value`
+        );
 
       return ctx;
     } catch (error) {

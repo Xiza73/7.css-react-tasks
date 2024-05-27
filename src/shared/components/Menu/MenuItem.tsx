@@ -4,7 +4,10 @@ export interface MenuItemProps extends ChildrenProps {
   hasPopup?: boolean;
 }
 
-export const MenuItem: React.FC<MenuItemProps> = ({ hasPopup = false, children }) => {
+export const MenuItem: React.FC<MenuItemProps> = ({
+  hasPopup = false,
+  children,
+}) => {
   return (
     <li
       role="menuitem"

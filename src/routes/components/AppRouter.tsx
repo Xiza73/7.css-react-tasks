@@ -1,4 +1,11 @@
-import { createBrowserRouter, createRoutesFromElements, Navigate, Outlet, Route, useNavigate } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Navigate,
+  Outlet,
+  Route,
+  useNavigate,
+} from 'react-router-dom';
 
 import Auth from '@/app/Auth';
 import Home from '@/app/Home';

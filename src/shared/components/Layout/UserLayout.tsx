@@ -13,7 +13,9 @@ export const UserLayout: React.FC<ChildrenProps> = ({ children }) => {
       <UserNavbar />
       <section className="window flex flex-col flex-1">
         <div className="title-bar w-full items-start justify-start">
-          <div className="title-bar-text">User: {user?.name || user?.email || ''}</div>
+          <div className="title-bar-text">
+            User: {user?.name || user?.email || ''}
+          </div>
         </div>
         <CenterContent>{children}</CenterContent>
         <Footer />

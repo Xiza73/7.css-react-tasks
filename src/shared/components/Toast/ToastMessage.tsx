@@ -80,7 +80,12 @@ export const ToastMessage: React.FC<ToastMessageProps> = ({
     >
       <div className="flex flex-row p-2 flex-no-wrap w-full">
         {variant.icon && (
-          <div className={clsx('flex items-center h-12 w-12', 'mx-auto text-xl select-none')}>
+          <div
+            className={clsx(
+              'flex items-center h-12 w-12',
+              'mx-auto text-xl select-none'
+            )}
+          >
             <Icon
               className={clsx('mx-auto', variant.iconstyle)}
               icon={variant.icon}
@@ -89,7 +94,9 @@ export const ToastMessage: React.FC<ToastMessageProps> = ({
         )}
 
         <div className="flex flex-col flex-no-wrap px-1 w-full">
-          <div className="flex my-auto font-bold select-none">{variant.name}</div>
+          <div className="flex my-auto font-bold select-none">
+            {variant.name}
+          </div>
           <p
             className={clsx(
               '-mt-0.5 my-auto break-all flex',
@@ -102,7 +109,10 @@ export const ToastMessage: React.FC<ToastMessageProps> = ({
         </div>
         <div
           onClick={() => onRemove && onRemove(id)}
-          className={clsx('w-10 h-12 mr-2 items-center mx-auto', 'text-center leading-none text-lg')}
+          className={clsx(
+            'w-10 h-12 mr-2 items-center mx-auto',
+            'text-center leading-none text-lg'
+          )}
         >
           <Icon
             className={clsx(

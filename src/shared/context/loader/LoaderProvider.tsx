@@ -1,6 +1,11 @@
 import { useCallback, useMemo, useReducer } from 'react';
 
-import { LoaderActions, LoaderContext, LoaderProviderProps, loaderReducer } from '.';
+import {
+  LoaderActions,
+  LoaderContext,
+  LoaderProviderProps,
+  loaderReducer,
+} from '.';
 
 export const LoaderProvider: React.FC<LoaderProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(loaderReducer, {
@@ -25,5 +30,7 @@ export const LoaderProvider: React.FC<LoaderProviderProps> = ({ children }) => {
     [state, addLoader, removeLoader]
   );
 
-  return <LoaderContext.Provider value={value}>{children}</LoaderContext.Provider>;
+  return (
+    <LoaderContext.Provider value={value}>{children}</LoaderContext.Provider>
+  );
 };

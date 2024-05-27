@@ -32,7 +32,10 @@ export const useAuth = () => {
     }
 
     if (!user) {
-      const axiosResponse = await callEndpoint<ApiUser>(authService.loginSuccess(), { showError: false });
+      const axiosResponse = await callEndpoint<ApiUser>(
+        authService.loginSuccess(),
+        { showError: false }
+      );
 
       if (!axiosResponse.success || !axiosResponse.responseObject) {
         dispatch(endProcessing());
@@ -54,7 +57,9 @@ export const useAuth = () => {
     async (email: string, password: string): Promise<boolean> => {
       addLoader();
 
-      const axiosResponse = await callEndpoint<ApiUser>(authService.signIn(email, password));
+      const axiosResponse = await callEndpoint<ApiUser>(
+        authService.signIn(email, password)
+      );
 
       if (axiosResponse.success && axiosResponse.responseObject) {
         storage.setStorage('user', userAdapter(axiosResponse.responseObject));
@@ -85,7 +90,9 @@ export const useAuth = () => {
     async (email: string, password: string, repeatPassword: string) => {
       addLoader();
 
-      const axiosResponse = await callEndpoint<ApiUser>(authService.signUp(email, password, repeatPassword));
+      const axiosResponse = await callEndpoint<ApiUser>(
+        authService.signUp(email, password, repeatPassword)
+      );
 
       if (!axiosResponse.success || !axiosResponse.responseObject) {
         removeLoader();

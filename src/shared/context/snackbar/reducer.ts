@@ -1,6 +1,14 @@
-import { ShowSnackbarAction, SnackbarAction, SnackbarActions, SnackbarState } from '.';
+import {
+  ShowSnackbarAction,
+  SnackbarAction,
+  SnackbarActions,
+  SnackbarState,
+} from '.';
 
-type SnackbarHandler = (state: SnackbarState, action: SnackbarAction) => SnackbarState;
+type SnackbarHandler = (
+  state: SnackbarState,
+  action: SnackbarAction
+) => SnackbarState;
 
 const snackbarReducerHandler: Record<SnackbarActions, SnackbarHandler> = {
   [SnackbarActions.SHOW_SNACKBAR]: (state, action) => {
@@ -19,5 +27,7 @@ const snackbarReducerHandler: Record<SnackbarActions, SnackbarHandler> = {
   }),
 };
 
-export const snackbarReducer = (state: SnackbarState, action: SnackbarAction): SnackbarState =>
-  snackbarReducerHandler[action.type](state, action) ?? state;
+export const snackbarReducer = (
+  state: SnackbarState,
+  action: SnackbarAction
+): SnackbarState => snackbarReducerHandler[action.type](state, action) ?? state;

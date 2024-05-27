@@ -19,5 +19,7 @@ const loaderReducerHandler: Record<LoaderActions, LoaderHandler> = {
   },
 };
 
-export const loaderReducer = (state: LoaderState, action: LoaderAction): LoaderState =>
-  loaderReducerHandler[action.type](state, action) ?? state;
+export const loaderReducer = (
+  state: LoaderState,
+  action: LoaderAction
+): LoaderState => loaderReducerHandler[action.type](state, action) ?? state;

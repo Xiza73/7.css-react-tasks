@@ -8,11 +8,12 @@ const initialState: SnackbarState = {
   type: 'success',
 };
 
-export const [SnackbarContext, useSnackbar] = createContext<SnackbarContextProps>(
-  {
-    ...initialState,
-    openSnackbar: (_: { type: Severity; message: string }) => {},
-    closeSnackbar: () => {},
-  },
-  'Snackbar'
-);
+export const [SnackbarContext, useSnackbar] =
+  createContext<SnackbarContextProps>(
+    {
+      ...initialState,
+      openSnackbar: (_: { type: Severity; message: string }) => {},
+      closeSnackbar: () => {},
+    },
+    'Snackbar'
+  );
