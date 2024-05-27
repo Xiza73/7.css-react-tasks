@@ -16,6 +16,7 @@ export interface TaskCardProps {
   description: string;
   createdAt: string;
   status: TaskStatus;
+  constraintsRef: React.MutableRefObject<null>;
 }
 
 export const TaskCard: React.FC<TaskCardProps> = ({
@@ -23,6 +24,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   title,
   description,
   createdAt,
+  constraintsRef,
   status,
 }) => {
   const navigate = useNavigate();
@@ -54,6 +56,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       onMaximize={() => navigate(`${ModuleRoute.TASKS}/edit/${id}`)}
       title="Task"
       width="w-40"
+      constraintsRef={constraintsRef}
       footer={
         <div className="status-bar">
           <p className="status-bar-field">{status}</p>

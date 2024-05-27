@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 
-import { HomeRoute } from '@/routes/models/home.model';
 import { ModuleRoute } from '@/routes/models/module.model';
 import { TasksRoute } from '@/routes/models/tasks.model';
 import { useAuth } from '@/store';
@@ -27,13 +26,13 @@ export const UserNavbar: React.FC = () => {
       <MenuItem hasPopup>
         Go to...
         <Menu>
-          <MenuItem>
+          {/* <MenuItem>
             <MenuOption
               onClick={() => navigate(`${ModuleRoute.HOME}${HomeRoute.MAIN}`)}
             >
               Home
             </MenuOption>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem hasPopup>
             Task
             <Menu>

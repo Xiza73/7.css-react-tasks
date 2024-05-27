@@ -1,6 +1,7 @@
 import '@/index.scss';
 
 import clsx from 'clsx';
+import { motion } from 'framer-motion';
 
 import { ChildrenProps } from '../models/props.model';
 
@@ -14,6 +15,7 @@ export interface ContainerProps extends ChildrenProps {
   width?: string;
   footer?: React.ReactNode;
   withoutFooter?: boolean;
+  constraintsRef?: React.MutableRefObject<null>;
   onMaximize?: () => void;
   onClose?: () => void;
 }
@@ -29,11 +31,23 @@ export const Container: React.FC<ContainerProps> = ({
   width = 'w-64',
   footer = null,
   withoutFooter = false,
+  constraintsRef,
   onMaximize,
   onClose,
 }) => {
   return (
-    <div className={clsx('window active flex flex-col', width)}>
+    <motion.div
+      className={clsx('window active flex flex-col', width, {
+        absolute: !!constraintsRef,
+      })}
+      {...(constraintsRef && {
+        dragConstraints: constraintsRef,
+        drag: true,
+        dragMomentum: true,
+        dragTransition: { timeConstant: 1000, power: 0 },
+        dragElastic: 0,
+      })}
+    >
       <div className="title-bar">
         <div className="title-bar-text">{title}</div>
         {(showMinimize || showMaximize || showClose) && (
@@ -64,6 +78,6 @@ export const Container: React.FC<ContainerProps> = ({
         </>
       )}
       {withoutFooter && children}
-    </div>
+    </motion.div>
   );
 };
