@@ -1,11 +1,18 @@
+import { motion } from 'framer-motion';
+import { useRef } from 'react';
+
 import { useTask } from '../../context/task/TaskContext';
 import { TaskCard } from '../TaskCard';
 
 export const ListTasksContent: React.FC = () => {
   const { tasks, total, handleShowMore } = useTask();
+  const constraintsRef = useRef(null);
 
   return (
-    <div className="flex justify-around items-stretch flex-wrap gap-x-2 gap-y-6 overflow-y-auto pt-1 pb-3 has-scrollbar">
+    <motion.div
+      ref={constraintsRef}
+      className="relative flex justify-around items-stretch flex-wrap gap-x-2 gap-y-6 overflow-y-auto pt-1 pb-3 has-scrollbar"
+    >
       {tasks.map(({ id, title, description, status, createdAt }) => (
         <TaskCard
           key={id}
@@ -14,6 +21,7 @@ export const ListTasksContent: React.FC = () => {
           description={description}
           status={status}
           createdAt={createdAt}
+          constraintsRef={constraintsRef}
         />
       ))}
       {!tasks.length && (
@@ -31,6 +39,6 @@ export const ListTasksContent: React.FC = () => {
           </button>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };

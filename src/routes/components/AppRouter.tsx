@@ -8,7 +8,6 @@ import {
 } from 'react-router-dom';
 
 import Auth from '@/app/Auth';
-import Home from '@/app/Home';
 import Tasks from '@/app/Tasks';
 import { useKeyboardShortcut } from '@/shared/hooks/useKeyboardShortcut';
 
@@ -40,13 +39,13 @@ export const AppRouter = createBrowserRouter(
         path={`${ModuleRoute.TASKS}/*`}
         element={<Tasks />}
       />
-      <Route
+      {/* <Route
         path={`${ModuleRoute.HOME}/*`}
         element={<Home />}
-      />
+      /> */}
       <Route
         path="*"
-        element={<Navigate to={ModuleRoute.HOME} />}
+        element={<Navigate to={ModuleRoute.TASKS} />}
       />
     </Route>
   )

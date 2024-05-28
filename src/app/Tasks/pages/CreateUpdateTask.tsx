@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+import { useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Container } from '@/shared/components/Container';
@@ -12,6 +14,7 @@ export const CreateUpdateTask: React.FC = () => {
   const { callEndpoint } = useFetchAndLoad();
   const navigate = useNavigate();
   const { id } = useParams();
+  const constraintsRef = useRef(null);
 
   const onSubmit = async (data: TaskFormSchema) => {
     if (id)
@@ -29,13 +32,21 @@ export const CreateUpdateTask: React.FC = () => {
   };
 
   return (
-    <Container title={id ? 'Edit Task' : 'Create Task'}>
-      <article
-        role="tabpanel"
-        className="!mb-0"
+    <motion.div
+      ref={constraintsRef}
+      className="relative w-full h-full flex justify-center items-center"
+    >
+      <Container
+        title={id ? 'Edit Task' : 'Create Task'}
+        constraintsRef={constraintsRef}
       >
-        <CreateUpdateForm onSubmit={onSubmit} />
-      </article>
-    </Container>
+        <article
+          role="tabpanel"
+          className="!mb-0"
+        >
+          <CreateUpdateForm onSubmit={onSubmit} />
+        </article>
+      </Container>
+    </motion.div>
   );
 };
