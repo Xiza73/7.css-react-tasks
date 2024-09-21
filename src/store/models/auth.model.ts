@@ -5,3 +5,10 @@ export interface AuthState {
   isProcessing: boolean;
   user?: User;
 }
+
+export interface AuthStore extends AuthState {
+  login: (args: AuthState['user']) => void;
+  logout: () => void;
+  signUp: (args: AuthState['user']) => void;
+  endProcessing: () => void;
+}

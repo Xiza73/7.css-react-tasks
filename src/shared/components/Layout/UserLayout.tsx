@@ -1,4 +1,4 @@
-import { useSelector } from '@/store';
+import { useAuthStore } from '@/store/useAuthStore';
 
 import { ChildrenProps } from '../../models/props.model';
 import { CenterContent } from './CenterContent';
@@ -6,7 +6,7 @@ import { Footer } from './Footer';
 import { UserNavbar } from './UserNavbar';
 
 export const UserLayout: React.FC<ChildrenProps> = ({ children }) => {
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useAuthStore((state) => state);
 
   return (
     <section className="flex flex-col h-screen w-full">

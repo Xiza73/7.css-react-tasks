@@ -4,11 +4,12 @@ import { RouterProvider } from 'react-router-dom';
 import { AppRouter } from './routes/components/AppRouter';
 import { Loader } from './shared/components/Loader';
 import { Modal } from './shared/components/Modal';
-import { useAuth, useSelector } from './store';
+import { useAuth } from './store/hooks/useAuth';
+import { useAuthStore } from './store/useAuthStore';
 
 function App() {
   const { handlerCurrentUser } = useAuth();
-  const { isProcessing } = useSelector((state) => state.auth);
+  const { isProcessing } = useAuthStore((state) => state);
 
   useEffect(() => {
     handlerCurrentUser();

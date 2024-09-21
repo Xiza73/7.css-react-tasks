@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { Form } from '@/shared/components/Form';
 import { Input } from '@/shared/components/Input';
-import { useAuth } from '@/store';
+import { useAuth } from '@/store/hooks/useAuth';
 
 const formSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email'),

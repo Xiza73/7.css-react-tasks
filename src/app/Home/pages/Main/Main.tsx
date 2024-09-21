@@ -1,4 +1,4 @@
-import { useAuth } from '@/store';
+import { useAuth } from '@/store/hooks/useAuth';
 
 export const Main: React.FC = () => {
   const { logout } = useAuth();

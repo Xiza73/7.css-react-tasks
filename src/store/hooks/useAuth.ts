@@ -1,30 +1,31 @@
 import { useCallback } from 'react';
 
 import { userAdapter } from '@/app/Auth/adapters/auth.adapter';
-import { ApiUser } from '@/app/Auth/models/auth.model';
+import { ApiUser, User } from '@/app/Auth/models/auth.model';
 import * as authService from '@/app/Auth/services/auth.service';
+import { getItem, removeItem, setItem } from '@/lib/local-storage';
 import { useLoader } from '@/shared/context/loader';
 import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
-import * as storage from '@/shared/utils/local-storage.util';
 
-import { endProcessing, login, logout, signUp } from '..';
-import { useDispatch } from '.';
+import { useAuthStore } from '../useAuthStore';
 
 export const useAuth = () => {
-  const dispatch = useDispatch();
+  const { endProcessing, login, logout, signUp } = useAuthStore(
+    (state) => state
+  );
   const { addLoader, removeLoader } = useLoader();
   const { callEndpoint, callMiddlewareEndpoint } = useFetchAndLoad();
 
   const handlerCurrentUser = useCallback(async () => {
     addLoader();
-    let user = storage.getStorage('user');
+    let user: User | null = getItem('user');
 
     if (user) {
       const middlewareResponse = await callMiddlewareEndpoint();
       if (!middlewareResponse.success) {
-        storage.removeStorage('user');
+        removeItem('user');
 
-        dispatch(endProcessing());
+        endProcessing();
         removeLoader();
 
         return;
@@ -38,20 +39,27 @@ export const useAuth = () => {
       );
 
       if (!axiosResponse.success || !axiosResponse.responseObject) {
-        dispatch(endProcessing());
+        endProcessing();
         removeLoader();
 
         return;
       }
 
       user = userAdapter(axiosResponse.responseObject);
-      storage.setStorage('user', user);
+      setItem('user', user);
     }
 
-    dispatch(login(user));
-    dispatch(endProcessing());
+    login(user);
+    endProcessing();
     removeLoader();
-  }, [addLoader, dispatch, removeLoader, callMiddlewareEndpoint, callEndpoint]);
+  }, [
+    addLoader,
+    login,
+    endProcessing,
+    removeLoader,
+    callMiddlewareEndpoint,
+    callEndpoint,
+  ]);
 
   const loginAction = useCallback(
     async (email: string, password: string): Promise<boolean> => {
@@ -62,16 +70,16 @@ export const useAuth = () => {
       );
 
       if (axiosResponse.success && axiosResponse.responseObject) {
-        storage.setStorage('user', userAdapter(axiosResponse.responseObject));
+        setItem('user', userAdapter(axiosResponse.responseObject));
 
-        dispatch(login(userAdapter(axiosResponse.responseObject)));
+        login(userAdapter(axiosResponse.responseObject));
       }
 
       removeLoader();
 
       return axiosResponse.success;
     },
-    [addLoader, callEndpoint, removeLoader, dispatch]
+    [addLoader, callEndpoint, login, removeLoader]
   );
 
   const logoutAction = useCallback(async () => {
@@ -79,12 +87,12 @@ export const useAuth = () => {
 
     const axiosResponse = await callEndpoint<any>(authService.logout());
 
-    storage.removeStorage('user');
-    dispatch(logout());
+    removeItem('user');
+    logout();
     removeLoader();
 
     return axiosResponse.success;
-  }, [callEndpoint, dispatch, addLoader, removeLoader]);
+  }, [addLoader, callEndpoint, logout, removeLoader]);
 
   const signUpAction = useCallback(
     async (email: string, password: string, repeatPassword: string) => {
@@ -100,14 +108,14 @@ export const useAuth = () => {
         return axiosResponse.success;
       }
 
-      storage.setStorage('user', axiosResponse.responseObject);
+      setItem('user', axiosResponse.responseObject);
 
-      dispatch(signUp(userAdapter(axiosResponse.responseObject)));
+      signUp(userAdapter(axiosResponse.responseObject));
       removeLoader();
 
       return axiosResponse.success;
     },
-    [callEndpoint, dispatch, addLoader, removeLoader]
+    [addLoader, callEndpoint, signUp, removeLoader]
   );
 
   return {

@@ -4,7 +4,7 @@ import {
   type InternalAxiosRequestConfig,
 } from 'axios';
 
-import { getItem } from './localStorage';
+import { getItem } from './local-storage';
 
 export interface ConsoleError {
   status: number;

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { ModuleRoute } from '@/routes/models/module.model';
 import { TasksRoute } from '@/routes/models/tasks.model';
-import { useAuth } from '@/store';
+import { useAuth } from '@/store/hooks/useAuth';
 
 import { Menu } from '../Menu/Menu';
 import { MenuBar } from '../Menu/MenuBar';
