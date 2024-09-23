@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 
-import { ModuleRoute } from '@/routes/models/module.model';
 import { Container } from '@/shared/components/Container';
 import { useModal } from '@/shared/context/modal/ModalContext';
 import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
+import { ModuleRoute } from '@/shared/routes/models/module.model';
 
 import { useTask } from '../context/task/TaskContext';
 import { TaskStatus } from '../models/task-status.model';
@@ -36,7 +36,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     await callEndpoint(deleteTask(id));
     handleTasks();
 
-    navigate('/tasks');
+    // navigate({ to: '/tasks' });
 
     closeModal();
   };
@@ -53,7 +53,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       showClose
       onClose={handleDelete}
       maximizeClassName="edit"
-      onMaximize={() => navigate(`${ModuleRoute.TASKS}/edit/${id}`)}
+      onMaximize={() => navigate({ to: `${ModuleRoute.TASKS}/edit/${id}` })}
       title="Task"
       width="w-40"
       constraintsRef={constraintsRef}

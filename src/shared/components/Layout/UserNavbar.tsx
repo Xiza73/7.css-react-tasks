@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 
-import { ModuleRoute } from '@/routes/models/module.model';
-import { TasksRoute } from '@/routes/models/tasks.model';
+import { ModuleRoute } from '@/shared/routes/models/module.model';
+import { TasksRoute } from '@/shared/routes/models/tasks.model';
 import { useAuth } from '@/store/hooks/useAuth';
 
 import { Menu } from '../Menu/Menu';
@@ -39,7 +39,7 @@ export const UserNavbar: React.FC = () => {
               <MenuItem>
                 <MenuOption
                   onClick={() =>
-                    navigate(`${ModuleRoute.TASKS}${TasksRoute.LIST}`)
+                    navigate({ to: `${ModuleRoute.TASKS}${TasksRoute.LIST}` })
                   }
                 >
                   List <span>Alt+T</span>
@@ -48,7 +48,7 @@ export const UserNavbar: React.FC = () => {
               <MenuItem>
                 <MenuOption
                   onClick={() =>
-                    navigate(`${ModuleRoute.TASKS}${TasksRoute.CREATE}`)
+                    navigate({ to: `${ModuleRoute.TASKS}${TasksRoute.CREATE}` })
                   }
                 >
                   Create

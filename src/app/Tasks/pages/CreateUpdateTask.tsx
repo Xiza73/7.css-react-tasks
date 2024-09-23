@@ -1,7 +1,8 @@
+// import { useNavigate, useParams } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 import { useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 
+// import { useNavigate, useParams } from 'react-router-dom';
 import { Container } from '@/shared/components/Container';
 import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
 
@@ -12,8 +13,9 @@ import { createTask, updateTask } from '../services/task.service';
 
 export const CreateUpdateTask: React.FC = () => {
   const { callEndpoint } = useFetchAndLoad();
-  const navigate = useNavigate();
-  const { id } = useParams();
+  // const navigate = useNavigate();
+  // const { id } = useParams({ strict: false });
+  const id = '1';
   const constraintsRef = useRef(null);
 
   const onSubmit = async (data: TaskFormSchema) => {
@@ -28,7 +30,7 @@ export const CreateUpdateTask: React.FC = () => {
       );
     else await callEndpoint(createTask(data.title, data.description));
 
-    navigate('/tasks');
+    // navigate({ to: '/tasks' });
   };
 
   return (

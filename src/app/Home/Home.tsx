@@ -1,16 +1,16 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+// import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { PrivateRoute } from '@/routes/components/PrivateRoute';
-import { HomeRoute } from '@/routes/models/home.model';
-import { ModuleRoute } from '@/routes/models/module.model';
-import { UserLayout } from '@/shared/components/Layout/UserLayout';
+import { PrivateRoute } from '@/shared/routes/components/PrivateRoute';
+// import { HomeRoute } from '@/shared/routes/models/home.model';
+// import { ModuleRoute } from '@/shared/routes/models/module.model';
+// import { UserLayout } from '@/shared/components/Layout/UserLayout';
 
-import { Main } from './pages/Main';
+// import { Main } from './pages/Main';
 
 export const Home: React.FC = () => {
   return (
     <PrivateRoute>
-      <UserLayout>
+      {/* <UserLayout>
         <Routes>
           <Route
             path={HomeRoute.MAIN}
@@ -21,7 +21,8 @@ export const Home: React.FC = () => {
             element={<Navigate to={`${ModuleRoute.HOME}${HomeRoute.MAIN}`} />}
           />
         </Routes>
-      </UserLayout>
+      </UserLayout> */}
+      Home
     </PrivateRoute>
   );
 };

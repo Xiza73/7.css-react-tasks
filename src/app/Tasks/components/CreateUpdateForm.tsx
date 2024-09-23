@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+// import { useParams } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
 
+// import { useParams } from 'react-router-dom';
 import { Form } from '@/shared/components/Form';
 import { Input, Select, TextArea } from '@/shared/components/Input';
 import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
@@ -29,7 +30,8 @@ export const CreateUpdateForm: React.FC<CreateUpdateFormProps> = ({
     resolver: zodResolver(taskFormSchema),
   });
   const { callEndpoint } = useFetchAndLoad();
-  const { id } = useParams();
+  // const { id } = useParams({ strict: false });
+  const id = '1';
 
   const handleNewTask = () => {
     setValue('title', '');

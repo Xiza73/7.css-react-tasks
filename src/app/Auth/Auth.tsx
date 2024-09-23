@@ -1,16 +1,14 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { PublicRoute } from '@/shared/routes/components/PublicRoute';
+// import { AuthRoute } from '@/shared/routes/models/auth.model';
+// import { ModuleRoute } from '@/shared/routes/models/module.model';
 
-import { PublicRoute } from '@/routes/components/PublicRoute';
-import { AuthRoute } from '@/routes/models/auth.model';
-import { ModuleRoute } from '@/routes/models/module.model';
-
-import { AuthLayout } from './components/AuthLayout';
-import { Login } from './pages/Login/Login';
+// import { AuthLayout } from './components/AuthLayout';
+// import { Login } from './pages/Login/Login';
 
 export const Auth: React.FC = () => {
   return (
     <PublicRoute>
-      <AuthLayout>
+      {/* <AuthLayout>
         <Routes>
           <Route
             path={AuthRoute.LOGIN}
@@ -21,7 +19,8 @@ export const Auth: React.FC = () => {
             element={<Navigate to={`${ModuleRoute.AUTH}${AuthRoute.LOGIN}`} />}
           />
         </Routes>
-      </AuthLayout>
+      </AuthLayout> */}
+      Auth
     </PublicRoute>
   );
 };
