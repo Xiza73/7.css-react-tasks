@@ -1,14 +1,12 @@
-// import { Navigate } from '@tanstack/react-router';
+import { Navigate } from '@tanstack/react-router';
 
 import { ChildrenProps } from '@/shared/models/props.model';
-// import { useAuthStore } from '@/store/useAuthStore';
-
-// import { ModuleRoute } from '../models/module.model';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export const PublicRoute: React.FC<ChildrenProps> = ({ children }) => {
-  // const { isAuthenticated } = useAuthStore((state) => state);
+  const { isAuthenticated } = useAuthStore((state) => state);
 
-  // if (isAuthenticated) return <Navigate to={ModuleRoute.TASKS} />;
+  if (isAuthenticated) return <Navigate to={'/task'} />;
 
   return <>{children}</>;
 };

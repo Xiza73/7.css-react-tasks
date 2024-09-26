@@ -11,8 +11,6 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   return (
     <li
       role="menuitem"
-      // tabIndex={0}
-      // aria-haspopup={hasPopup}
       {...(hasPopup && { tabIndex: 0, 'aria-haspopup': `${hasPopup}` })}
     >
       {children}

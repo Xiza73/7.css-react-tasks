@@ -1,7 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
 
-import { ModuleRoute } from '@/shared/routes/models/module.model';
-import { TasksRoute } from '@/shared/routes/models/tasks.model';
 import { useAuth } from '@/store/hooks/useAuth';
 
 import { Menu } from '../Menu/Menu';
@@ -37,20 +35,12 @@ export const UserNavbar: React.FC = () => {
             Task
             <Menu>
               <MenuItem>
-                <MenuOption
-                  onClick={() =>
-                    navigate({ to: `${ModuleRoute.TASKS}${TasksRoute.LIST}` })
-                  }
-                >
+                <MenuOption onClick={() => navigate({ to: '/task' })}>
                   List <span>Alt+T</span>
                 </MenuOption>
               </MenuItem>
               <MenuItem>
-                <MenuOption
-                  onClick={() =>
-                    navigate({ to: `${ModuleRoute.TASKS}${TasksRoute.CREATE}` })
-                  }
-                >
+                <MenuOption onClick={() => navigate({ to: '/task/create' })}>
                   Create
                 </MenuOption>
               </MenuItem>

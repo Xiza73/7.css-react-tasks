@@ -13,17 +13,67 @@ import { createFileRoute } from '@tanstack/react-router';
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root';
+import { Route as TaskImport } from './routes/task';
+import { Route as AuthImport } from './routes/auth';
+import { Route as TaskIndexImport } from './routes/task.index';
+import { Route as AuthIndexImport } from './routes/auth.index';
 
 // Create Virtual Routes
 
+const MainLazyImport = createFileRoute('/main')();
 const IndexLazyImport = createFileRoute('/')();
+const TaskCreateLazyImport = createFileRoute('/task/create')();
+const AuthLoginLazyImport = createFileRoute('/auth/login')();
+const TaskTaskIdEditLazyImport = createFileRoute('/task/$taskId/edit')();
 
 // Create/Update Routes
+
+const MainLazyRoute = MainLazyImport.update({
+  path: '/main',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/main.lazy').then((d) => d.Route));
+
+const TaskRoute = TaskImport.update({
+  path: '/task',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const AuthRoute = AuthImport.update({
+  path: '/auth',
+  getParentRoute: () => rootRoute,
+} as any);
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route));
+
+const TaskIndexRoute = TaskIndexImport.update({
+  path: '/',
+  getParentRoute: () => TaskRoute,
+} as any);
+
+const AuthIndexRoute = AuthIndexImport.update({
+  path: '/',
+  getParentRoute: () => AuthRoute,
+} as any);
+
+const TaskCreateLazyRoute = TaskCreateLazyImport.update({
+  path: '/create',
+  getParentRoute: () => TaskRoute,
+} as any).lazy(() => import('./routes/task.create.lazy').then((d) => d.Route));
+
+const AuthLoginLazyRoute = AuthLoginLazyImport.update({
+  path: '/login',
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() => import('./routes/auth.login.lazy').then((d) => d.Route));
+
+const TaskTaskIdEditLazyRoute = TaskTaskIdEditLazyImport.update({
+  path: '/$taskId/edit',
+  getParentRoute: () => TaskRoute,
+} as any).lazy(() =>
+  import('./routes/task.$taskId.edit.lazy').then((d) => d.Route)
+);
 
 // Populate the FileRoutesByPath interface
 
@@ -36,39 +86,175 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport;
       parentRoute: typeof rootRoute;
     };
+    '/auth': {
+      id: '/auth';
+      path: '/auth';
+      fullPath: '/auth';
+      preLoaderRoute: typeof AuthImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/task': {
+      id: '/task';
+      path: '/task';
+      fullPath: '/task';
+      preLoaderRoute: typeof TaskImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/main': {
+      id: '/main';
+      path: '/main';
+      fullPath: '/main';
+      preLoaderRoute: typeof MainLazyImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/auth/login': {
+      id: '/auth/login';
+      path: '/login';
+      fullPath: '/auth/login';
+      preLoaderRoute: typeof AuthLoginLazyImport;
+      parentRoute: typeof AuthImport;
+    };
+    '/task/create': {
+      id: '/task/create';
+      path: '/create';
+      fullPath: '/task/create';
+      preLoaderRoute: typeof TaskCreateLazyImport;
+      parentRoute: typeof TaskImport;
+    };
+    '/auth/': {
+      id: '/auth/';
+      path: '/';
+      fullPath: '/auth/';
+      preLoaderRoute: typeof AuthIndexImport;
+      parentRoute: typeof AuthImport;
+    };
+    '/task/': {
+      id: '/task/';
+      path: '/';
+      fullPath: '/task/';
+      preLoaderRoute: typeof TaskIndexImport;
+      parentRoute: typeof TaskImport;
+    };
+    '/task/$taskId/edit': {
+      id: '/task/$taskId/edit';
+      path: '/$taskId/edit';
+      fullPath: '/task/$taskId/edit';
+      preLoaderRoute: typeof TaskTaskIdEditLazyImport;
+      parentRoute: typeof TaskImport;
+    };
   }
 }
 
 // Create and export the route tree
 
+interface AuthRouteChildren {
+  AuthLoginLazyRoute: typeof AuthLoginLazyRoute;
+  AuthIndexRoute: typeof AuthIndexRoute;
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthLoginLazyRoute: AuthLoginLazyRoute,
+  AuthIndexRoute: AuthIndexRoute,
+};
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren);
+
+interface TaskRouteChildren {
+  TaskCreateLazyRoute: typeof TaskCreateLazyRoute;
+  TaskIndexRoute: typeof TaskIndexRoute;
+  TaskTaskIdEditLazyRoute: typeof TaskTaskIdEditLazyRoute;
+}
+
+const TaskRouteChildren: TaskRouteChildren = {
+  TaskCreateLazyRoute: TaskCreateLazyRoute,
+  TaskIndexRoute: TaskIndexRoute,
+  TaskTaskIdEditLazyRoute: TaskTaskIdEditLazyRoute,
+};
+
+const TaskRouteWithChildren = TaskRoute._addFileChildren(TaskRouteChildren);
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute;
+  '/auth': typeof AuthRouteWithChildren;
+  '/task': typeof TaskRouteWithChildren;
+  '/main': typeof MainLazyRoute;
+  '/auth/login': typeof AuthLoginLazyRoute;
+  '/task/create': typeof TaskCreateLazyRoute;
+  '/auth/': typeof AuthIndexRoute;
+  '/task/': typeof TaskIndexRoute;
+  '/task/$taskId/edit': typeof TaskTaskIdEditLazyRoute;
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute;
+  '/main': typeof MainLazyRoute;
+  '/auth/login': typeof AuthLoginLazyRoute;
+  '/task/create': typeof TaskCreateLazyRoute;
+  '/auth': typeof AuthIndexRoute;
+  '/task': typeof TaskIndexRoute;
+  '/task/$taskId/edit': typeof TaskTaskIdEditLazyRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
   '/': typeof IndexLazyRoute;
+  '/auth': typeof AuthRouteWithChildren;
+  '/task': typeof TaskRouteWithChildren;
+  '/main': typeof MainLazyRoute;
+  '/auth/login': typeof AuthLoginLazyRoute;
+  '/task/create': typeof TaskCreateLazyRoute;
+  '/auth/': typeof AuthIndexRoute;
+  '/task/': typeof TaskIndexRoute;
+  '/task/$taskId/edit': typeof TaskTaskIdEditLazyRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/';
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/task'
+    | '/main'
+    | '/auth/login'
+    | '/task/create'
+    | '/auth/'
+    | '/task/'
+    | '/task/$taskId/edit';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/';
-  id: '__root__' | '/';
+  to:
+    | '/'
+    | '/main'
+    | '/auth/login'
+    | '/task/create'
+    | '/auth'
+    | '/task'
+    | '/task/$taskId/edit';
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/task'
+    | '/main'
+    | '/auth/login'
+    | '/task/create'
+    | '/auth/'
+    | '/task/'
+    | '/task/$taskId/edit';
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute;
+  AuthRoute: typeof AuthRouteWithChildren;
+  TaskRoute: typeof TaskRouteWithChildren;
+  MainLazyRoute: typeof MainLazyRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  AuthRoute: AuthRouteWithChildren,
+  TaskRoute: TaskRouteWithChildren,
+  MainLazyRoute: MainLazyRoute,
 };
 
 export const routeTree = rootRoute
@@ -83,11 +269,52 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/auth",
+        "/task",
+        "/main"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/auth": {
+      "filePath": "auth.tsx",
+      "children": [
+        "/auth/login",
+        "/auth/"
+      ]
+    },
+    "/task": {
+      "filePath": "task.tsx",
+      "children": [
+        "/task/create",
+        "/task/",
+        "/task/$taskId/edit"
+      ]
+    },
+    "/main": {
+      "filePath": "main.lazy.tsx"
+    },
+    "/auth/login": {
+      "filePath": "auth.login.lazy.tsx",
+      "parent": "/auth"
+    },
+    "/task/create": {
+      "filePath": "task.create.lazy.tsx",
+      "parent": "/task"
+    },
+    "/auth/": {
+      "filePath": "auth.index.tsx",
+      "parent": "/auth"
+    },
+    "/task/": {
+      "filePath": "task.index.tsx",
+      "parent": "/task"
+    },
+    "/task/$taskId/edit": {
+      "filePath": "task.$taskId.edit.lazy.tsx",
+      "parent": "/task"
     }
   }
 }

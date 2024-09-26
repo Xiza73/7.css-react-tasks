@@ -1,9 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-// import { useParams } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-// import { useParams } from 'react-router-dom';
 import { Form } from '@/shared/components/Form';
 import { Input, Select, TextArea } from '@/shared/components/Input';
 import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
@@ -30,8 +29,7 @@ export const CreateUpdateForm: React.FC<CreateUpdateFormProps> = ({
     resolver: zodResolver(taskFormSchema),
   });
   const { callEndpoint } = useFetchAndLoad();
-  // const { id } = useParams({ strict: false });
-  const id = '1';
+  const { taskId } = useParams({ strict: false });
 
   const handleNewTask = () => {
     setValue('title', '');
@@ -41,9 +39,9 @@ export const CreateUpdateForm: React.FC<CreateUpdateFormProps> = ({
   const getTask = async () => {
     setValue('status', TaskStatus.OPEN);
 
-    if (!id) return handleNewTask();
+    if (!taskId) return handleNewTask();
 
-    const res = await callEndpoint<ApiTask>(taskService.getTask(id));
+    const res = await callEndpoint<ApiTask>(taskService.getTask(taskId));
 
     if (!res.responseObject) return handleNewTask();
 
@@ -57,13 +55,13 @@ export const CreateUpdateForm: React.FC<CreateUpdateFormProps> = ({
     getTask();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [taskId]);
 
   return (
     <Form
       onSubmit={handleSubmit(async (data) => await onSubmit(data))}
       errors={errors}
-      buttonText={id ? 'Update' : 'Create'}
+      buttonText={taskId ? 'Update' : 'Create'}
     >
       <Input
         label="Title"
@@ -79,7 +77,7 @@ export const CreateUpdateForm: React.FC<CreateUpdateFormProps> = ({
         hasBreakpoint
         register={register}
       />
-      {id && (
+      {taskId && (
         <Select
           label="Status"
           name="status"

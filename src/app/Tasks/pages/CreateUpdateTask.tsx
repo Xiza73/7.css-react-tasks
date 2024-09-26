@@ -1,8 +1,7 @@
-// import { useNavigate, useParams } from '@tanstack/react-router';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 import { useRef } from 'react';
 
-// import { useNavigate, useParams } from 'react-router-dom';
 import { Container } from '@/shared/components/Container';
 import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
 
@@ -13,16 +12,15 @@ import { createTask, updateTask } from '../services/task.service';
 
 export const CreateUpdateTask: React.FC = () => {
   const { callEndpoint } = useFetchAndLoad();
-  // const navigate = useNavigate();
-  // const { id } = useParams({ strict: false });
-  const id = '1';
+  const navigate = useNavigate();
+  const { taskId } = useParams({ strict: false });
   const constraintsRef = useRef(null);
 
   const onSubmit = async (data: TaskFormSchema) => {
-    if (id)
+    if (taskId)
       await callEndpoint(
         updateTask(
-          id,
+          taskId,
           data.title,
           data.description,
           data.status || TaskStatus.OPEN
@@ -30,7 +28,7 @@ export const CreateUpdateTask: React.FC = () => {
       );
     else await callEndpoint(createTask(data.title, data.description));
 
-    // navigate({ to: '/tasks' });
+    navigate({ to: '/task' });
   };
 
   return (
@@ -39,7 +37,7 @@ export const CreateUpdateTask: React.FC = () => {
       className="relative w-full h-full flex justify-center items-center"
     >
       <Container
-        title={id ? 'Edit Task' : 'Create Task'}
+        title={taskId ? 'Edit Task' : 'Create Task'}
         constraintsRef={constraintsRef}
       >
         <article

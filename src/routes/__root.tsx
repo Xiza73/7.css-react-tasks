@@ -1,25 +1,32 @@
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
+import { createRootRoute, Outlet, useNavigate } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
-export const Route = createRootRoute({
-  component: () => (
+import { useKeyboardShortcut } from '@/shared/hooks/useKeyboardShortcut';
+
+const AppRoute: React.FC = () => {
+  const navigate = useNavigate();
+
+  useKeyboardShortcut(
+    (e) => {
+      e.preventDefault();
+
+      navigate({ to: '/task' });
+    },
+    { code: 'KeyT', altKey: true }
+  );
+
+  return (
     <>
-      <div className="p-2 flex gap-2">
-        <Link
-          to="/"
-          className="[&.active]:font-bold"
-        >
-          Home
-        </Link>{' '}
-      </div>
-      <hr />
       <Outlet />
       <TanStackRouterDevtools />
     </>
-  ),
-  errorComponent: ({ error, info }) => {
-    console.error({ error, info });
+  );
+};
 
+export const Route = createRootRoute({
+  component: AppRoute,
+  errorComponent: ({ error }) => {
     return <div> 404 - {error.message}</div>;
   },
+  notFoundComponent: () => <div>404 - Not Found</div>,
 });

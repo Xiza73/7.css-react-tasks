@@ -1,12 +1,11 @@
-// import { useAuth } from '@/store/hooks/useAuth';
+import { useAuth } from '@/store/hooks/useAuth';
 
 export const Main: React.FC = () => {
-  // const { logout } = useAuth();
+  const { logout } = useAuth();
 
   return (
     <>
-      {/* <button onClick={logout}>Logout</button> */}
-      Logout
+      <button onClick={logout}>Logout</button>
     </>
   );
 };
