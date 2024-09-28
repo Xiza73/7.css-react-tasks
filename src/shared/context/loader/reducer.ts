@@ -1,15 +1,20 @@
-import { AddLoaderAction, LoaderAction, LoaderActions } from './actions';
+import {
+  LoaderAction,
+  LoaderActions,
+  PushLoaderAction,
+  SetIsFetchingAction,
+} from './actions';
 import { LoaderState } from './interfaces';
 
 type LoaderHandler = (state: LoaderState, action: LoaderAction) => LoaderState;
 
 const loaderReducerHandler: Record<LoaderActions, LoaderHandler> = {
-  [LoaderActions.START_LOADING]: (state, action) => ({
+  [LoaderActions.PUSH_LOADER]: (state, action) => ({
     ...state,
     activeLoaders: state.activeLoaders + 1,
-    hideLoader: (action as AddLoaderAction).payload,
+    hideLoader: (action as PushLoaderAction).payload,
   }),
-  [LoaderActions.STOP_LOADING]: (state) => {
+  [LoaderActions.POP_LOADER]: (state) => {
     const activeLoaders = state.activeLoaders - 1;
 
     return {
@@ -17,6 +22,10 @@ const loaderReducerHandler: Record<LoaderActions, LoaderHandler> = {
       activeLoaders: activeLoaders < 0 ? 0 : activeLoaders,
     };
   },
+  [LoaderActions.SET_IS_FETCHING]: (state, action) => ({
+    ...state,
+    isFetching: (action as SetIsFetchingAction).payload,
+  }),
 };
 
 export const loaderReducer = (

@@ -3,30 +3,31 @@ import { motion } from 'framer-motion';
 import { useRef } from 'react';
 
 import { Container } from '@/shared/components/Container';
-import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
 
 import { CreateUpdateForm } from '../components/CreateUpdateForm';
 import { TaskFormSchema } from '../models/create-update.model';
 import { TaskStatus } from '../models/task-status.model';
-import { createTask, updateTask } from '../services/task.service';
+import {
+  useCreateTaskMutation,
+  useUpdateTaskMutation,
+} from '../services/queries/task.query';
 
 export const CreateUpdateTask: React.FC = () => {
-  const { callEndpoint } = useFetchAndLoad();
   const navigate = useNavigate();
   const { taskId } = useParams({ strict: false });
   const constraintsRef = useRef(null);
+  const { mutateAsync: updateTask } = useUpdateTaskMutation({});
+  const { mutateAsync: createTask } = useCreateTaskMutation({});
 
   const onSubmit = async (data: TaskFormSchema) => {
     if (taskId)
-      await callEndpoint(
-        updateTask(
-          taskId,
-          data.title,
-          data.description,
-          data.status || TaskStatus.OPEN
-        )
-      );
-    else await callEndpoint(createTask(data.title, data.description));
+      await updateTask({
+        id: taskId,
+        title: data.title,
+        description: data.description,
+        status: data.status || TaskStatus.OPEN,
+      });
+    else await createTask(data);
 
     navigate({ to: '/task' });
   };

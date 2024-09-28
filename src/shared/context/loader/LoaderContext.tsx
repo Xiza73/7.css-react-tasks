@@ -2,16 +2,18 @@ import { createContext } from '@/shared/utils/create-context.util';
 
 import { LoaderContextProps, LoaderState } from '.';
 
-const initialState: LoaderState = {
+export const loaderInitialState: LoaderState = {
   activeLoaders: 0,
+  isFetching: false,
   hideLoader: false,
 };
 
 export const [LoaderContext, useLoader] = createContext<LoaderContextProps>(
   {
-    ...initialState,
-    addLoader: (_?: boolean) => {},
-    removeLoader: () => {},
+    ...loaderInitialState,
+    pushLoader: (_?: boolean) => {},
+    popLoader: () => {},
+    setIsFetching: (_: boolean) => {},
   },
   'Loader'
 );

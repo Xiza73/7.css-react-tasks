@@ -3,31 +3,34 @@ import { useCallback, useMemo, useReducer } from 'react';
 import {
   LoaderActions,
   LoaderContext,
+  loaderInitialState,
   LoaderProviderProps,
   loaderReducer,
 } from '.';
 
 export const LoaderProvider: React.FC<LoaderProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(loaderReducer, {
-    activeLoaders: 0,
-    hideLoader: false,
-  });
+  const [state, dispatch] = useReducer(loaderReducer, loaderInitialState);
 
-  const addLoader = useCallback((hideLoader = false) => {
-    dispatch({ type: LoaderActions.START_LOADING, payload: hideLoader });
+  const pushLoader = useCallback((hideLoader = false) => {
+    dispatch({ type: LoaderActions.PUSH_LOADER, payload: hideLoader });
   }, []);
 
-  const removeLoader = useCallback(() => {
-    dispatch({ type: LoaderActions.STOP_LOADING });
+  const popLoader = useCallback(() => {
+    dispatch({ type: LoaderActions.POP_LOADER });
+  }, []);
+
+  const setIsFetching = useCallback((isFetching: boolean) => {
+    dispatch({ type: LoaderActions.SET_IS_FETCHING, payload: isFetching });
   }, []);
 
   const value = useMemo(
     () => ({
       ...state,
-      addLoader,
-      removeLoader,
+      pushLoader,
+      popLoader,
+      setIsFetching,
     }),
-    [state, addLoader, removeLoader]
+    [state, pushLoader, popLoader, setIsFetching]
   );
 
   return (

@@ -5,13 +5,10 @@ import { useForm } from 'react-hook-form';
 
 import { Form } from '@/shared/components/Form';
 import { Input, Select, TextArea } from '@/shared/components/Input';
-import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
 
-import { taskAdapter } from '../adapters/task.adapter';
 import { TaskFormSchema, taskFormSchema } from '../models/create-update.model';
-import { ApiTask } from '../models/task.model';
 import { TaskStatus } from '../models/task-status.model';
-import * as taskService from '../services/task.service';
+import { useGetTaskQuery } from '../services/queries/task.query';
 
 export interface CreateUpdateFormProps {
   onSubmit: (data: TaskFormSchema) => Promise<void>;
@@ -28,8 +25,9 @@ export const CreateUpdateForm: React.FC<CreateUpdateFormProps> = ({
   } = useForm<TaskFormSchema>({
     resolver: zodResolver(taskFormSchema),
   });
-  const { callEndpoint } = useFetchAndLoad();
   const { taskId } = useParams({ strict: false });
+  const { data } = useGetTaskQuery({ id: taskId, enabled: !!taskId });
+  const task = data?.responseObject;
 
   const handleNewTask = () => {
     setValue('title', '');
@@ -39,13 +37,13 @@ export const CreateUpdateForm: React.FC<CreateUpdateFormProps> = ({
   const getTask = async () => {
     setValue('status', TaskStatus.OPEN);
 
-    if (!taskId) return handleNewTask();
+    if (!taskId || !task) return handleNewTask();
 
-    const res = await callEndpoint<ApiTask>(taskService.getTask(taskId));
+    // const res = await callEndpoint<ApiTask>(taskService.getTask(taskId));
 
-    if (!res.responseObject) return handleNewTask();
+    // if (!res.responseObject) return handleNewTask();
 
-    const task = taskAdapter(res.responseObject);
+    // const task = taskAdapter(res.responseObject);
 
     setValue('title', task.title);
     setValue('description', task.description);
@@ -55,7 +53,7 @@ export const CreateUpdateForm: React.FC<CreateUpdateFormProps> = ({
     getTask();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [taskId]);
+  }, [data]);
 
   return (
     <Form

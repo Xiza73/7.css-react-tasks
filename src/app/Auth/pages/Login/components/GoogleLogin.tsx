@@ -1,6 +1,6 @@
 import { Icon } from '@iconify-icon/react';
 
-import { getSignInGoogleUrl } from '@/app/Auth/services/auth.service';
+import { getSignInGoogleUrl } from '@/app/Auth/services/api/auth.service';
 
 export const GoogleLogin: React.FC = () => {
   const handleSignInWithGoogle = async () => {

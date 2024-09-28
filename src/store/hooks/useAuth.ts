@@ -1,11 +1,16 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
-import { userAdapter } from '@/app/Auth/adapters/auth.adapter';
-import { ApiUser, User } from '@/app/Auth/models/auth.model';
-import * as authService from '@/app/Auth/services/auth.service';
+import { User } from '@/app/Auth/models/auth.model';
+import {
+  useCheckSessionMutation,
+  useLoginSuccessMutation,
+  useLogoutMutation,
+  useSignInMutation,
+  useSignUpMutation,
+} from '@/app/Auth/services/queries/auth.query';
 import { getItem, removeItem, setItem } from '@/lib/local-storage';
 import { useLoader } from '@/shared/context/loader';
-import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
+import { noopFunction } from '@/shared/utils/noopFunction';
 
 import { useAuthStore } from '../useAuthStore';
 
@@ -13,109 +18,113 @@ export const useAuth = () => {
   const { endProcessing, login, logout, signUp } = useAuthStore(
     (state) => state
   );
-  const { addLoader, removeLoader } = useLoader();
-  const { callEndpoint, callMiddlewareEndpoint } = useFetchAndLoad();
+  const { pushLoader, popLoader } = useLoader();
+  const { error: errorOnCheckSession, mutateAsync: checkSession } =
+    useCheckSessionMutation();
+  const { data: loginSuccessData, mutateAsync: loginSuccess } =
+    useLoginSuccessMutation();
+  const { mutateAsync: signIn } = useSignInMutation();
+  const { mutateAsync: logoutMutation } = useLogoutMutation();
+  const { mutateAsync: signUpMutation } = useSignUpMutation();
 
   const handlerCurrentUser = useCallback(async () => {
-    addLoader();
-    let user: User | null = getItem('user');
+    const user: User | null = getItem('user');
 
     if (user) {
-      const middlewareResponse = await callMiddlewareEndpoint();
-      if (!middlewareResponse.success) {
-        removeItem('user');
+      await checkSession({});
 
-        endProcessing();
-        removeLoader();
-
-        return;
-      }
+      login(user);
     }
 
-    if (!user) {
-      const axiosResponse = await callEndpoint<ApiUser>(
-        authService.loginSuccess(),
-        { showError: false }
-      );
+    if (!user) await loginSuccess({}).catch(noopFunction);
 
-      if (!axiosResponse.success || !axiosResponse.responseObject) {
-        endProcessing();
-        removeLoader();
-
-        return;
-      }
-
-      user = userAdapter(axiosResponse.responseObject);
-      setItem('user', user);
-    }
-
-    login(user);
     endProcessing();
-    removeLoader();
-  }, [
-    addLoader,
-    login,
-    endProcessing,
-    removeLoader,
-    callMiddlewareEndpoint,
-    callEndpoint,
-  ]);
+    popLoader();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginSuccess, checkSession, login]);
+
+  useEffect(() => {
+    if (loginSuccessData?.success && loginSuccessData?.responseObject) {
+      setItem('user', loginSuccessData?.responseObject);
+
+      login(loginSuccessData?.responseObject);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginSuccessData]);
+
+  useEffect(() => {
+    if (errorOnCheckSession) {
+      removeItem('user');
+      logout();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorOnCheckSession]);
 
   const loginAction = useCallback(
     async (email: string, password: string): Promise<boolean> => {
-      addLoader();
+      pushLoader();
 
-      const axiosResponse = await callEndpoint<ApiUser>(
-        authService.signIn(email, password)
-      );
+      // const axiosResponse = await callEndpoint<ApiUser>(
+      //   authService.signIn(email, password)
+      // );
+      const axiosResponse = await signIn({ email, password });
 
       if (axiosResponse.success && axiosResponse.responseObject) {
-        setItem('user', userAdapter(axiosResponse.responseObject));
+        setItem('user', axiosResponse.responseObject);
 
-        login(userAdapter(axiosResponse.responseObject));
+        login(axiosResponse.responseObject);
       }
 
-      removeLoader();
+      popLoader();
 
       return axiosResponse.success;
     },
-    [addLoader, callEndpoint, login, removeLoader]
+    [pushLoader, login, popLoader, signIn]
   );
 
   const logoutAction = useCallback(async () => {
-    addLoader();
+    pushLoader();
 
-    const axiosResponse = await callEndpoint<any>(authService.logout());
+    // const axiosResponse = await callEndpoint<any>(authService.logout());
+    const axiosResponse = await logoutMutation({});
 
     removeItem('user');
     logout();
-    removeLoader();
+    popLoader();
 
     return axiosResponse.success;
-  }, [addLoader, callEndpoint, logout, removeLoader]);
+  }, [pushLoader, logout, logoutMutation, popLoader]);
 
   const signUpAction = useCallback(
     async (email: string, password: string, repeatPassword: string) => {
-      addLoader();
+      pushLoader();
 
-      const axiosResponse = await callEndpoint<ApiUser>(
-        authService.signUp(email, password, repeatPassword)
-      );
+      // const axiosResponse = await callEndpoint<ApiUser>(
+      //   authService.signUp(email, password, repeatPassword)
+      // );
+      const axiosResponse = await signUpMutation({
+        email,
+        password,
+        repeatPassword,
+      });
 
       if (!axiosResponse.success || !axiosResponse.responseObject) {
-        removeLoader();
+        popLoader();
 
         return axiosResponse.success;
       }
 
       setItem('user', axiosResponse.responseObject);
 
-      signUp(userAdapter(axiosResponse.responseObject));
-      removeLoader();
+      signUp(axiosResponse.responseObject);
+      popLoader();
 
       return axiosResponse.success;
     },
-    [addLoader, callEndpoint, signUp, removeLoader]
+    [pushLoader, signUpMutation, signUp, popLoader]
   );
 
   return {

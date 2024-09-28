@@ -4,6 +4,8 @@ import {
   type InternalAxiosRequestConfig,
 } from 'axios';
 
+import { User } from '@/app/Auth/models/auth.model';
+
 import { getItem } from './local-storage';
 
 export interface ConsoleError {
@@ -14,8 +16,15 @@ export interface ConsoleError {
 export const requestInterceptor = (
   config: InternalAxiosRequestConfig
 ): InternalAxiosRequestConfig => {
-  const token = getItem<string>('token');
-  if (token) config.headers.set('Authorization', `Bearer ${token}`);
+  try {
+    const user: User | null = getItem('user');
+    const token = user ? user.token : '';
+
+    if (token) config.headers.set('Authorization', `Bearer ${token}`);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+  }
 
   return config;
 };
@@ -33,10 +42,13 @@ export const errorInterceptor = async (error: AxiosError): Promise<void> => {
         status: error.response.status,
         data: error.response.data,
       };
+      // eslint-disable-next-line no-console
       console.error(errorMessage);
     } else if (error.request) {
+      // eslint-disable-next-line no-console
       console.error(error.request);
     } else {
+      // eslint-disable-next-line no-console
       console.error('Error', error.message);
     }
     await Promise.reject(error);

@@ -2,11 +2,10 @@ import { useNavigate } from '@tanstack/react-router';
 
 import { Container } from '@/shared/components/Container';
 import { useModal } from '@/shared/context/modal/ModalContext';
-import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
 
 import { useTask } from '../context/task/TaskContext';
 import { TaskStatus } from '../models/task-status.model';
-import { deleteTask } from '../services/task.service';
+import { useDeleteTaskMutation } from '../services/queries/task.query';
 import { DeleteModal } from './DeleteModal';
 
 export interface TaskCardProps {
@@ -28,11 +27,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
-  const { callEndpoint } = useFetchAndLoad();
   const { handleTasks } = useTask();
+  const { mutateAsync: deleteTask } = useDeleteTaskMutation({});
 
   const handleConfirmDelete = async () => {
-    await callEndpoint(deleteTask(id));
+    // await callEndpoint(deleteTask(id));
+    await deleteTask(id);
     handleTasks();
 
     navigate({ to: '/task' });

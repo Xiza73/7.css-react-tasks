@@ -1,3 +1,5 @@
+import { AxiosData } from '@/shared/models/axios.model';
+
 import { TaskStatus } from './task-status.model';
 
 export interface ApiTask {
@@ -24,3 +26,20 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ListTask {
+  data: Task[];
+  total: number;
+  pages: number;
+  page: number;
+}
+
+export interface GetTaskParams {
+  title?: string;
+  page?: number;
+  limit?: number;
+}
+
+export type GetTasksResponse = AxiosData<ApiListTask>;
+
+export type GetTaskResponse = AxiosData<ApiTask>;

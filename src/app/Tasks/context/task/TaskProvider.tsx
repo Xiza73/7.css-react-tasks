@@ -1,11 +1,9 @@
-import { useCallback, useMemo, useReducer } from 'react';
+import { useCallback, useEffect, useMemo, useReducer } from 'react';
 
-import { useFetchAndLoad } from '@/shared/hooks/useFetchAndLoad';
 import { initialPagination } from '@/shared/utils/service.util';
 
-import { taskAdapter } from '../../adapters/task.adapter';
-import { ApiListTask, ApiTask, Task } from '../../models/task.model';
-import { getTasks } from '../../services/task.service';
+import { Task } from '../../models/task.model';
+import { useGetTasksQuery } from '../../services/queries/task.query';
 import { TaskActions } from './actions';
 import { TaskProviderProps } from './interfaces';
 import { taskReducer } from './reducer';
@@ -13,7 +11,15 @@ import { initialState, TaskContext } from './TaskContext';
 
 export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(taskReducer, initialState);
-  const { callEndpoint } = useFetchAndLoad();
+  const { search, page, limit } = state;
+  const { data: listTasksData } = useGetTasksQuery({
+    params: {
+      ...(search && { title: search }),
+      page,
+      limit,
+    },
+    enabled: !!page,
+  });
 
   const setTasks = useCallback((tasks: Task[]) => {
     dispatch({ type: TaskActions.SET_TASKS, payload: tasks });
@@ -36,30 +42,9 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
   }, []);
 
   const handleTasks = useCallback(
-    async (page = 1) => {
-      const { search, limit, tasks } = state;
+    async (page = 1) => setPage(page),
 
-      const response = await callEndpoint<ApiListTask>(
-        getTasks({
-          ...(search && { title: search }),
-          page,
-          limit,
-        })
-      );
-
-      if (response.success && response.responseObject?.page === page) {
-        const transformedTasks = (response.responseObject?.data || []).map(
-          (task: ApiTask) => taskAdapter(task)
-        );
-        page === initialPagination.page
-          ? setTasks(transformedTasks)
-          : setTasks([...tasks, ...transformedTasks]);
-        setTotal(response.responseObject?.total || 0);
-        setPages(response.responseObject?.pages || 0);
-        setPage(response.responseObject?.page || 0);
-      }
-    },
-    [state, callEndpoint, setTasks, setTotal, setPages, setPage]
+    [setPage]
   );
 
   const handleShowMore = useCallback(() => {
@@ -69,6 +54,21 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
 
     handleTasks(page + 1);
   }, [handleTasks, state]);
+
+  useEffect(() => {
+    if (listTasksData?.success && listTasksData?.responseObject) {
+      const { data, total, page, pages } = listTasksData.responseObject;
+
+      page === initialPagination.page
+        ? setTasks(data)
+        : setTasks([...state.tasks, ...data]);
+      setTotal(total);
+      setPage(page);
+      setPages(pages);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listTasksData]);
 
   const value = useMemo(
     () => ({
